@@ -1,0 +1,18 @@
+{
+  "name": "arbyte-rest-api",
+  "version": "1.0.0",
+  "description": "minha primeira api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Sem testes\"",
+    "start": "node server"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Luciana Alves <luh.ana.af@gmail.com> (https://github.com/luh-alves/)",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
