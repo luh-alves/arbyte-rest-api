@@ -12,7 +12,7 @@ const getAll = async (req, res) => {
 }
 const create = async (req, res) => {
     try {
-        if (!req.body.quantity || !req.body.product_id ) {
+        if (!req.body.quantity || !req.body.product_id) {
             throw { status: 400, message: 'Invalid data' }
         }
         const created = await service.create(req.body)
@@ -21,7 +21,17 @@ const create = async (req, res) => {
         handleError(res, error)
     }
 }
+
+const update = async (req, res) => {
+    try {
+        const updated = await service.update(req.params.id, req.body)
+        res.json(updated)
+    } catch (error) {
+        handleError(res, error)
+    }
+}
 module.exports = {
     getAll,
     create,
+    update,
 }
