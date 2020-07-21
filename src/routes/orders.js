@@ -1,14 +1,11 @@
 const { Router } = require('express')
 const router = new Router()
 const routerName = '/orders'
+const controller = require('../controllers/orders')
 
 
 //Lista todos os produtos, e será um array de produtos
-router.get(routerName, (req, res) => {
-    res.json([{
-        message: 'Vai retornar todos os pedidos'
-    }])
-})
+router.get(routerName, controller.getAll)
 
 //Pega os dados de um produto
 router.get(`${routerName}/:id`, (req, res) => {
@@ -18,18 +15,8 @@ router.get(`${routerName}/:id`, (req, res) => {
     })
 })
 
-//Cria um produto
-router.post(routerName, (req, res) => {
-    const pedido = {
-        idProduto : req.body.idProduto,
-        quantidade : req.body.quantidade
-    }
-    
-    res.status(201).json({
-        message: 'Vai criar um pedido',
-        pedidoCriado: pedido
-    })
-})
+//Cria um pedido
+router.post(routerName, controller.create)
 
 //edita os dados de um produto
 router.patch(`${routerName}/:id`, (req, res) => {
@@ -40,5 +27,5 @@ router.patch(`${routerName}/:id`, (req, res) => {
 })
 
 //delete um produto
-router.delete(`${routerName}/:id`, (req,res) => res.status(204).end())
+router.delete(`${routerName}/:id`, (req, res) => res.status(204).end())
 module.exports = router

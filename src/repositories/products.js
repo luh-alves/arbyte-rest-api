@@ -1,4 +1,5 @@
 const knex = require('../../database/indexDataBase')
+const moment = require('moment')
 const tableName = 'products'
 
 //select * from products
@@ -22,6 +23,7 @@ const create = (product) => {
 
 //update products set name = ?, price = ? wherw id = ?
 const update = (id, product) => {
+    product.updated_at = moment().utc().format()
     return knex(tableName)
         .where({ id: id })
         .update(product)
