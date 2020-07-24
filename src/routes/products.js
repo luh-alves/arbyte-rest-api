@@ -2,6 +2,7 @@ const { Router } = require('express')
 const router = new Router()
 const routerName = '/products'
 const controller = require('../controllers/products')
+const authenticate = require('./middlewares/authenticate')
 
 
 
@@ -12,7 +13,7 @@ router.get(routerName, controller.getAll)
 router.get(`${routerName}/:id`, controller.getById)
 
 //Cria um produto
-router.post(routerName, controller.create)
+router.post(routerName, authenticate, controller.create)
 
 //edita os dados de um produto
 router.patch(`${routerName}/:id`, controller.update)
