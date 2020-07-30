@@ -1,20 +1,20 @@
-const knex = require('../../database/indexDataBase')
+const knex = require('../../database')
 const User = require('../models/User')
 const tableName = 'users'
 
-//insert into users (name,email,password,created_at, updated_at) values(?,?,?,?)
+// INSERT INTO users (name, email, password, created_at, updated_at) VALUES (?,?,?,?,?) 
 const create = async user => {
-    const [id] = await knex(tableName).insert(user)
+    const [id] = await knex(tableName).returning('id').insert(user)
     return id
 }
 
-//select * from users where id = ?
-const getOne = async (filter) => {
-    const [user] = await knex(tableName).where(filter)
+// SELECT * FROM users WHHERE ?=?
+const getOne = async params => {
+    const [user] = await knex(tableName).where(params)
     return new User(user)
 }
 
 module.exports = {
     create,
-    getOne,
+    getOne
 }

@@ -1,27 +1,36 @@
 const User = require('../models/User')
+const { encryptPassword } = require('../utils/encrypt')
 const repository = require('../repositories/users')
-const { encryptPassword } = require('./utils/encrypt')
-const { createToken } = require('./utils/jwt')
+const { createToken } = require('../utils/jwt')
 
 const create = async (data) => {
+
+    const userFound = await repository.getOne({ email: data.email })
+    
+    if (userFound.id) {
+        throw {status: 409, message: 'User already exists'}
+    }
+  
     const user = new User({
-        ...data,
-        id: undefined,
+        ...data, id: undefined,
         created_at: undefined,
-        updated_at: undefined,
+        updated_at: undefined
     })
 
     const { salt, encryptedPassword: password } = encryptPassword(data.password)
-    const id = await repository.create({ ...user, password, salt })
 
+    const id = await repository.create({ ...user, password, salt })
     const created = await repository.getOne({ id: id })
+
     return created.view()
+
 }
 
-const login = async (loginData) => {
+
+const login = async loginData => {
     const user = await repository.getOne({ email: loginData.email })
     if (!user) {
-        throw { status: 401, message: 'Not authorized' }
+        throw { status: 401, message: 'Not Authorized' }
     }
     const { encryptedPassword } = encryptPassword(loginData.password, user.salt)
     if (encryptedPassword !== user.password) {
@@ -30,20 +39,20 @@ const login = async (loginData) => {
     const token = createToken(user.id)
     return {
         user: user.view(),
-        token,
+        token
     }
 }
 
-const getById = async (id) => {
+const getById = async id => {
     const user = await repository.getOne({ id: id })
-    if (!user.id) {
-        throw { status: 404, message: 'Not Found' }
-
+    if (!user) {
+        throw { status: 404, message: "Not found" }
     }
     return user
 }
+
 module.exports = {
     create,
     login,
-    getById,
+    getById
 }

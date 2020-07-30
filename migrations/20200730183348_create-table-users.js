@@ -4,6 +4,7 @@ exports.up = function (knex) {
         table.increments()
         table.string('name').notNull()
         table.string('email').notNull().unique
+        table.string('cpf').notNull().unique
         table.string('password').notNull()
         table.timestamps()
     })

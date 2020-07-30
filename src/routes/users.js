@@ -1,12 +1,13 @@
 const { Router } = require('express')
 const router = new Router()
-const routerName = '/users'
 const controller = require('../controllers/users')
 
+const routeName = "/users"
 
-//Cria um produto
-router.post(routerName, controller.create)
+// Cria um usuário
+router.post(routeName, controller.create)
 
-router.post(`${routerName}/login`, controller.login)
+// Cria o login
+router.post(`${routeName}/login`, controller.login)
 
 module.exports = router

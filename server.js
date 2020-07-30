@@ -1,20 +1,23 @@
 const express = require('express')
 const routes = require('./src/routes')
-const app = express()
-const port = process.env.PORT || 55555
 const morgan = require('morgan')
-const bodyParser = require('body-parser')
 const cors = require('cors')
-
+const bodyParser = require('body-parser')
+const app = express()
+const port = process.env.PORT || 5555
 
 app.use(morgan('dev'))
+//app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(cors())
 
-//so vamos aceitar formato json como entrada
-app.use(bodyParser.json())
+app.use((req, res, next) => {
+    return next()
+})
+
 app.use(routes)
 
-//ou ele vai pegar o erro de cima ou vai ser 500
+
 app.use((error, req, res, next) => {
     res.status(error.status || 500)
     return res.send({
@@ -22,10 +25,10 @@ app.use((error, req, res, next) => {
             mensagem: error.message
         }
     })
-
 })
 
-app.listen(port, (err) => {
-    if (err) return console.log(`Não ${err}`)
-    console.log('Rodar', port)
+app.listen(port, err => {
+    if (err) return console.log(`Não startou ${err}`)
+
+    console.log('Running on port', port)
 })
